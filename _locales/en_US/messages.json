@@ -1,0 +1,4 @@
+{ "name_shrt":    {"message":   "Boostaler" }
+, "name_long":    {"message":   "Boostaler" }
+, "name_desc":    {"message":   "500% Speed Boost. Needs chrome://flags/#enable-stale-while-revalidate. ✰✰✰✰✰" }
+}
