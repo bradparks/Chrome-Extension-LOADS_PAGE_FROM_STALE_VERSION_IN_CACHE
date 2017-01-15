@@ -8,19 +8,36 @@
 regex_stalewhile   = /stale-while-revalidate/i;
 regex_staleiferror = /stale-if-error/i;
 regex_firstcomma   = /^\,/;
+regex_doublecomma   = /,,+/g;
 
-chrome.webRequest.onHeadersReceived.addListener(function(response){
-  headers = response.responseHeaders.reduce(function(carry,item){ carry[ item.name.toLowerCase() ] = item.value; return carry; },{});   /* temporary format */
-  /*--*/
-  var is_exist_cachecontrol   = -1 !== Object.keys(headers).indexOf("cache-control");
-  var is_exist_stale          = (true === is_exist_cachecontrol) && 
-                                (true === regex_stalewhile.test(headers["cache-control"]) || true === regex_staleiferror.test(headers["cache-control"]));
+function headers_handler(response){
+  // extract original
+  var is_edited = false;
 
-  if(true === is_exist_stale) return response;                                                                           //some stale definition already exist, do nothing.
-  headers["cache-control"] = headers["cache-control"] + ",stale-while-revalidate=86400,stale-if-error=259200";           //append stale instructions.
-  headers["cache-control"] = headers["cache-control"].replace(regex_firstcomma, "");                                     //if headers is empty or something, prevent 'comma' hanging at first. 
+  response.responseHeaders.forEach(function(item, index){
+    if("cache-control" !== item.name.toLowerCase())   return;
 
-  /*--*/
-  response.responseHeaders = Object.keys(headers).map(function(name){ return {"name":name, "value": headers[name]}; });  //override (*just local variable), other existing values kept.
-  return response;
-}, {"urls": ["*://*/*"]}, ["blocking", "responseHeaders"]);
+    if(false === regex_stalewhile.test(item.value))   item.value += ",stale-while-revalidate=86400";  //edit existing
+    if(false === regex_staleiferror.test(item.value)) item.value += ",stale-if-error=259200";
+
+    item.value = item.value.replace(regex_firstcomma, "").replace(regex_doublecomma, "");  //fix
+
+    is_edited = true;  //if false, there was no cache-control header
+  });
+  
+  if(false === is_edited) response.responseHeaders.push({name:"cache-control", value: "stale-while-revalidate=86400,stale-if-error=259200"});
+
+  return {"responseHeaders": response.responseHeaders};
+}
+
+filters   = {urls:  ["<all_urls>"]
+            ,types: ["main_frame", "sub_frame", "stylesheet", "script", "image", "font", "object"]
+            };
+info_spec = ["responseHeaders", "blocking"];
+
+chrome.webRequest.onHeadersReceived.addListener(headers_handler, filters, info_spec);
+
+/*
+//for debugging - will shows (readonly) the final version of the response-headers, after modified by ALL the extensions.
+chrome.webRequest.onResponseStarted.addListener(function(response){ console.log(response); }, filters, ["responseHeaders"]);
+*/
