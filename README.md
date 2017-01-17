@@ -10,7 +10,7 @@ and any update is done in the background, if you visit same pages few times a da
 
 To see the full effect, please enable <code>chrome://flags/#enable-stale-while-revalidate</code> first, and restart the browser.
 
-<img height="1" width="1" src="resources/screenshot_1.png"/>
+<img height="400" width="640" src="resources/screenshot_1.png"/>
 
 ##This Extension Is A Great Way To Enhance Browsing :)
 
