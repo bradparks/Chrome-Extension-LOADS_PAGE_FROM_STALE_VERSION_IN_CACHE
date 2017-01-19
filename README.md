@@ -23,6 +23,6 @@ To see the full effect, please enable <code>chrome://flags/#enable-stale-while-r
 ```
 Developer's HUB / Changelog
 
-2.0.8.1
+2.0.8.2
 + initial: (no versioning while was in-active alpha-stage :] ).
 ```
