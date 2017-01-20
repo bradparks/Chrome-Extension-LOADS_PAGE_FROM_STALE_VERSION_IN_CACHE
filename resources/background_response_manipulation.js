@@ -40,6 +40,7 @@ info_spec = ["responseHeaders", "blocking"];
 chrome.webRequest.onHeadersReceived.addListener(headers_handler, filters, info_spec);
 
 /*
-//for debugging - will shows (readonly) the final version of the response-headers, after modified by ALL the extensions.
-chrome.webRequest.onResponseStarted.addListener(function(response){ console.log(response); }, filters, ["responseHeaders"]);
+chrome.webRequest.onResponseStarted.addListener(function(response){ console.log(response); }, filters, ["responseHeaders"]);   //https://developer.chrome.com/extensions/webRequest#event-onResponseStarted     //for debugging - will shows (readonly) the final version of the response-headers, after modified by ALL the extensions.
+chrome.webRequest.onErrorOccurred.addListener(function(response){   console.log(response); }, filters);                        //https://developer.chrome.com/extensions/webRequest#event-onErrorOccurred       //will mostly show the uBlock-Origin net::request blocked messages.
+chrome.webRequest.onCompleted.addListener(function(response){       console.log(response); }, filters);                        //https://developer.chrome.com/extensions/webRequest#event-onCompleted
 */
