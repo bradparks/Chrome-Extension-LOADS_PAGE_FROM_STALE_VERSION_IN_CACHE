@@ -31,7 +31,9 @@ function headers_handler(response){
 }
 
 filters   = {urls:  ["<all_urls>"]
-            ,types: ["main_frame", "sub_frame", "stylesheet", "script", "image", "font", "object"]
+          //,types: ["main_frame", "sub_frame", "stylesheet", "script", "image", "font", "object"]                                         /*original set*/
+            ,types: ["main_frame", "sub_frame", "stylesheet", "script", "image", "font", "object",                   "ping", "other"]      /*all but not xhr, always keep the xhr most-updated...*/
+          //,types: ["main_frame", "sub_frame", "stylesheet", "script", "image", "font", "object", "xmlhttprequest", "ping", "other"]      /* Chrome max value:   https://developer.chrome.com/extensions/webRequest -- other might be ["xbl", "xslt", "beacon", "xml_dtd", "media", "websocket", "csp_report", "imageset", "web_manifest"] from: Mozilla max value:  https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest/ResourceType */
             };
 info_spec = ["responseHeaders", "blocking"];
 
